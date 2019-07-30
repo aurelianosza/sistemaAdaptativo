@@ -1,0 +1,15 @@
+{
+  "config": "./config.json",
+  "target":{
+      "host" : "127.0.0.1",
+      "port" : 3434
+  },
+  "server": [
+    {
+      "name": "principal",
+      "type": "socket",
+      "host": "127.0.0.1",
+      "port": "8045"
+    }
+  ]
+}

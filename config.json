@@ -1,0 +1,50 @@
+{
+    "modules":[
+        {
+            "name":"operacoes",
+            "commands" : [
+                {
+                    "command": "somador",
+                    "description" : "Retorna a soma de A e B",
+                    "params" : [],
+                    "response" : "int"
+                },
+                {
+                    "command" : "subtraidor",
+                    "description" : "Retorna a subtração de A por B",
+                    "params" : [],
+                    "response" : "int"
+                }
+            ]
+        },
+        {
+            "name": "set_numbers",
+            "commands" : [
+                {
+                    "command" : "set_a",
+                    "description" : "Seta o valor de A",
+                    "params" : [
+                        {
+                            "name"			: "valor_a",
+							"type"			: "int",
+							"description"	: "O valor que sera setado em A"
+                        }
+                    ],
+                    "response" : "string"                    
+                },
+                {
+                    "command" : "set_b",
+                    "description" : "Seta o valor de B",
+                    "params" : [
+                        {
+                            "name" : "valor_b",
+                            "type" : "int",
+                            "description" : "O valor que sera setado em B"
+                        }
+                    ],
+                    "response": "string"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,102 @@
+{
+	"modules":[
+		{
+			"name": "servers",
+			"commands":[
+				{
+					"command"		: "get_servers",
+					"description"	: "Retorna o numero de servidores.",
+					"params"		: [],
+					"response" 		: "int"
+				},
+				{
+					"command" 		: "add_server",
+					"description"	: "Adiciona um servidor.",
+					"params"		: [],
+					"response"		: "OK"
+				},
+				{
+					"command"		: "remove_server",
+					"description"	: "Remove um servidor.",
+					"params"		: [],
+					"response"		: "OK"
+				},
+				{
+					"command"		: "get_active_servers",
+					"description"	: "Retorna o numero de servidores ativos.",
+					"params"		: [],
+					"response"		: "int"
+				},
+				{
+					"command"		: "get_utilization",
+					"description"	: "Retorna a utilização do servidor a partir do Id passado",
+					"params"		: [
+						{
+							"name"			: "serverId",
+							"type"			: "int",
+							"description"	: "Id do servidor pesquisado"
+						}
+					],
+					"response"		: "float"
+				}
+			]
+		},
+		{
+			"name": "dimmer",
+			"commands" :[
+				{
+					"command"		: "get_dimmer",
+					"description"	: "Pega o valor de potencia do servidor.",
+					"params"		: [],
+					"response"		: "double"
+				}, 
+				{
+					"command"		: "set_dimmer",
+					"description"	: "Determina o valor de potencia do servidor.",
+					"params"		:[
+						{
+							"name" 			: "value",
+							"type"			: "float",
+							"description"	: "Determina o valor de potencia do servidor."	
+						}
+					],
+					"response"		: "OK"
+				}
+			]	
+		},
+		{
+			"name" : "arrival",
+			"commands" :[
+				{
+					"command"		: "get_arrival_rate",
+					"description"	: "Retorna o numero de chegadas de requisições nos últimos 60 segundos.",
+					"params"		: [],
+					"response"		: "float"
+				}
+			]
+		},
+		{
+			"name" : "response_time",
+			"commands":[
+				{
+					"command"		: "get_basic_rt",
+					"description"	: "Retorna o tempo médio de resposta",
+					"params"		: [],
+					"response"		: "double"
+				},
+				{
+					"command"		: "get_opt_rt",
+					"description"	: "Retorna o tempo médio de respostas com um conteudo opcional",
+					"params"		: [],
+					"response"		: "float"
+				},
+				{
+					"command"		: "get_opt_throughput",
+					"description"	: "Retorna a vazão média dos ultimos 60 segundos com conteudo opcional",
+					"params"		: [],
+					"response"		: "float"
+				}
+			]
+		}
+    ]
+}

@@ -1,0 +1,7 @@
+{"command":"somador", "params": {}}
+
+{"command":"set_a", "params":{"valor_a":55}}
+
+{"command":"set_b", "params": {"valor_b":708}}
+
+{"command":"subtraidor", "params":{}}
