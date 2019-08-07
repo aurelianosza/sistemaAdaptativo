@@ -7,9 +7,17 @@
   "server": [
     {
       "name": "principal",
+      "function": "comandos",
       "type": "socket",
       "host": "127.0.0.1",
-      "port": "8045"
+      "port": 8045
+    },
+    {
+      "name": "secundario",
+      "function": "eventos",
+      "type": "socket",
+      "host": "127.0.0.1",
+      "port": 9898
     }
   ]
 }

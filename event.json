@@ -1,0 +1,37 @@
+{
+    "type": "create",
+    "name": "nome_do_evento",
+    "operator": ">",
+    "base_value": "10",
+    "interval": "60",
+    "command":"somador", 
+    "params": {}
+}
+
+{"type":"create","name":"nome_do_evento","operator":">","base_value": 100,"interval":"10","command":"somador","params":{}}
+
+{
+    "type": "delete",
+    "name": "nome_do_evento"
+}
+
+{"type": "delete","name": "nome_do_evento"}
+
+{
+    "type":"update",
+    "name":"nome_do_evento",
+    "operator": ">=",
+    "base_value": "10",
+    "interval": "30",
+    "command": "somador",
+    "params":{}
+}
+
+{"type":"update","name":"nome_do_evento","operator": "!=","base_value": 100,"interval": "5","command": "somador","params":{}}
+
+{
+    "type": "read",
+    "name": "nome_do_evento"
+}
+
+{"type": "read","name": "nome_do_evento"}
