@@ -9,5 +9,20 @@ Os arquivos desse repositorio, servem para a demonstração de uma camada de ada
 Para executar e ver seu funcionamento segue os passos
 </p>
 
+<ul>
+    <li>
+        <p>
+            Acesse <a href="github.com/aurelianosza/swim-1">Esse Link</a>. Faça download do repositório.
+        </p>
+    </li>
+    <li>
+        <p>
+            Após o download, abra o terminal na pasta do projeto, e digite o comando       
+        </p>
+        <em>
+            docker-compose up
+        </em>
+    </li>
+</ul>
 
 </div>
