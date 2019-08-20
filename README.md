@@ -9,6 +9,22 @@ Os arquivos desse repositorio, servem para a demonstração de uma camada de ada
 Para executar e ver seu funcionamento segue os passos
 </p>
 
+<h3>
+também precisará de previamente instalado
+</h3>
+
+<ul>
+    <li>
+        <h6>Docker</h6>
+    </li>
+    <li>
+        <h6>Docker CLI</h6>
+    </li>
+    <li>
+        <h6>docker-compose compatível com a versão 3!</h6>
+    </li>
+</ul>
+
 <ul>
     <li>
         <p>
