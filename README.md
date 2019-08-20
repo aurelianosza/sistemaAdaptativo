@@ -12,14 +12,14 @@ Para executar e ver seu funcionamento segue os passos
 <ul>
     <li>
         <p>
-            Acesse <a href="github.com/aurelianosza/swim-1">Esse Link</a>. Faça download do repositório.
+            Acesse <a href="https://github.com/aurelianosza/swim-1" target="_blank">Esse Link</a>. Faça download do repositório.
         </p>
     </li>
     <li>
         <p>
             Após o download, abra o terminal na pasta do projeto, e digite o comando       
         </p>
-        <em>
+        <em class="bg-secondary">
             docker-compose up
         </em>
     </li>
