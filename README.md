@@ -19,7 +19,7 @@ Para executar e ver seu funcionamento segue os passos
         <p>
             Após o download, abra o terminal na pasta do projeto, e digite o comando       
         </p>
-        <em class="bg-secondary">
+        <em class="bg-primary">
             docker-compose up
         </em>
     </li>
