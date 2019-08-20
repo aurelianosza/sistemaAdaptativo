@@ -15,15 +15,17 @@ também precisará de previamente instalado
 
 <ul>
     <li>
-        <h6>Docker</h6>
+        Docker
     </li>
     <li>
-        <h6>Docker CLI</h6>
+        Docker CLI
     </li>
     <li>
-        <h6>docker-compose compatível com a versão 3!</h6>
+        docker-compose compatível com a versão 3!
     </li>
 </ul>
+
+h3
 
 <ul>
     <li>
