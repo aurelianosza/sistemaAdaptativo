@@ -1,8 +1,8 @@
 {
-  "config": "./config.json",
+  "config": "./configSwim.json",
   "target":{
       "host" : "127.0.0.1",
-      "port" : 3434
+      "port" : 4242
   },
   "server": [
     {

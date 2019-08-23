@@ -88,7 +88,11 @@ class main(object):
             sock.send("Erro ao atualizar evento")
 
     def run_event(self, name, operator, base_value, command, sock):
-        aux = int(self.send_command(command))
+        aux = self.send_command(command)
+        if command.type_response() == 'int':
+            aux = int(aux)
+        elif command.type_response() == 'float':
+            aux = float(aux)
         try:
             if operator == '==':
                 if aux == base_value:

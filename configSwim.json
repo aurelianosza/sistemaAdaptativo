@@ -13,13 +13,13 @@
 					"command" 		: "add_server",
 					"description"	: "Adiciona um servidor.",
 					"params"		: [],
-					"response"		: "OK"
+					"response"		: "string"
 				},
 				{
 					"command"		: "remove_server",
 					"description"	: "Remove um servidor.",
 					"params"		: [],
-					"response"		: "OK"
+					"response"		: "string"
 				},
 				{
 					"command"		: "get_active_servers",
@@ -48,7 +48,7 @@
 					"command"		: "get_dimmer",
 					"description"	: "Pega o valor de potencia do servidor.",
 					"params"		: [],
-					"response"		: "double"
+					"response"		: "float"
 				}, 
 				{
 					"command"		: "set_dimmer",
@@ -60,7 +60,7 @@
 							"description"	: "Determina o valor de potencia do servidor."	
 						}
 					],
-					"response"		: "OK"
+					"response"		: "string"
 				}
 			]	
 		},
@@ -82,7 +82,7 @@
 					"command"		: "get_basic_rt",
 					"description"	: "Retorna o tempo médio de resposta",
 					"params"		: [],
-					"response"		: "double"
+					"response"		: "string"
 				},
 				{
 					"command"		: "get_opt_rt",

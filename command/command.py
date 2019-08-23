@@ -83,6 +83,9 @@ class comand(object):
     def copy(self):
         return comand(self.instance)
 
+    def type_response(self):
+        return self.response
+
     #send Command
     def command_txt(self):
         aux = self.name

@@ -1,7 +1,26 @@
-{"command":"somador", "params": {}}
+//commandos do swim Server command
 
-{"command":"set_a", "params":{"valor_a":3}}
+//valor da potencia total dos servidores
+{"command":"get_dimmer", "params": {}}
 
-{"command":"set_b", "params": {"valor_b":97}}
+//muda o valor da potencia total
+{"command" : "set_dimmer", "params":{"value":0.9}}
 
-{"command":"subtraidor", "params":{}}
+//valor da potencia total dos servidores
+{"command":"get_dimmer", "params": {}}
+
+//commandos para geenciar eventos Server eventos
+
+//cria um evento
+{"type": "create","name":"estouro_limite_potencia","operator": ">","base_value": 0.6,"interval": 10,"command":"get_dimmer","params": {}}
+
+//CREATE:para especificar a criacao de um evento
+//NAME:serve para referenciar um evento
+//OPERATOR:como o valor resposta se relaciona com o evento
+//BASE_VALUE:base do valor resposta
+//INTERVAL:intervalo de tempo que será verificado (em segundos)
+//COMMAND:commando a ser executado na verificação
+//PARAMS:parametros do evento
+
+//altera um evento
+{"type":"update","name":"estouro_limite_potencia","operator": ">=","base_value": 0.95,"interval": 1,"command": "get_dimmer","params":{}}
