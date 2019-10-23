@@ -12,7 +12,7 @@
 //commandos para geenciar eventos Server eventos
 
 //cria um evento
-{"type": "create","name":"estouro_limite_potencia","operator": ">","base_value": 0.6,"interval": 10,"command":"get_dimmer","params": {}}
+{"type": "create","name":"estouro_limite_potencia","operator": ">","base_value": 0.2,"interval": 3,"command":"get_dimmer","params": {}}
 
 //CREATE:para especificar a criacao de um evento
 //NAME:serve para referenciar um evento
@@ -23,4 +23,15 @@
 //PARAMS:parametros do evento
 
 //altera um evento
-{"type":"update","name":"estouro_limite_potencia","operator": ">=","base_value": 0.95,"interval": 1,"command": "get_dimmer","params":{}}
+{"type":"update","name":"estouro_limite_potencia","operator": ">=","base_value": 0.4,"interval": 1,"command": "get_dimmer","params":{}}
+
+
+//delete
+
+{"type": "delete", "name":"estouro_limite_potencia"}7
+
+
+/////////////////
+/////estrategias
+
+[{"command":"set_dimmer", "params":{"value":0.5}}]

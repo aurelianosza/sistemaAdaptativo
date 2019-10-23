@@ -1,10 +1,13 @@
 from interface_factory.interface import interface
 from apscheduler.schedulers.background import BackgroundScheduler
+from reconfiguration_se import reconfiguration_se
+from behaviour_se import behaviour_se
 import command.command
 import json
 import socket
 from threading import Thread
 import _thread
+import multiprocessing
 
 
 class main(object):
@@ -16,6 +19,15 @@ class main(object):
         self.commands = {}
         self.file_config = ''
         self.server_threads = []
+
+
+        self.queue = multiprocessing.Queue()
+
+        self.queue_events_send = multiprocessing.Queue()
+        self.queue_events_recv = multiprocessing.Queue()
+
+        self.queue_commands_send = multiprocessing.Queue()
+        self.queue_commands_recv = multiprocessing.Queue()
 
         self.target = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.event_scheduler = BackgroundScheduler()
@@ -36,174 +48,143 @@ class main(object):
 
             with open(cfg['config']) as modules_json:
                 modules = json.loads(modules_json.read())
-                for i in modules['modules']:
-                    self.modules[i['name']] = []
-                    for j in i['commands']:
-                        self.modules[i['name']].append(command.command.comand(j))
-                        self.commands[j['command']] = self.modules[i['name']][-1]
+                facade = command.command.command_facade()
+                facade.load_commands(modules)
 
+    def close(self):
+        self.target.close()
+        for key, val in self.server_comandos:
+            val.close()
 
-    def add_event(self, event, sock):
-        try:
-            aux = None
-            if event["command"] in self.commands:
-                aux = self.commands[event["command"]].copy()
-                aux.load_paramets(event['params'])
-            else:
-                sock.send("Erro Evento não existe".encode())
-                return
-            self.events[event['name']] = (self.event_scheduler.add_job(lambda:self.run_event(event['name'], event['operator'], int(event['base_value']), aux, sock), 'interval', seconds=int(event['interval'])), event)
-        except Exception:
-            sock.send("Error ao adicionar evento {}.".format(event['name']).encode())
-        finally:
-            pass
-
-    def read_event(self, event, sock):
-        try:
-            if event['name'] in self.events:
-                sock.send(json.dumps(self.events[event['name']][1]).encode())
-            else:
-                sock.send("Event not found".encode())
-        except Exception:
-            sock.send("Erro ao buscar evento".encode())
-
-    def delete_event(self, event, sock):
-        try:
-            if event['name'] in self.events:
-                self.events[event['name']][0].remove()
-                del self.events[event['name']]
-            else:
-                sock.send("Event not Found".encode())
-        except Exception:
-            sock.send("Erro ao deletar evento".encode())
-
-    def update_event(self, event, sock):
-        try:
-            if event['name'] in self.events:
-                self.delete_event(event, sock)
-                self.add_event(event, sock)
-            else:
-                sock.send("Event not found".encode())
-        except Exception:
-            sock.send("Erro ao atualizar evento")
-
-    def run_event(self, name, operator, base_value, command, sock):
-        aux = self.send_command(command)
-        if command.type_response() == 'int':
-            aux = int(aux)
-        elif command.type_response() == 'float':
-            aux = float(aux)
-        try:
-            if operator == '==':
-                if aux == base_value:
-                    sock.send(name.encode())
-            elif operator == '!=':
-                if aux != base_value:
-                    sock.send(name.encode())      
-            elif operator == '>':
-                if aux > base_value:
-                    sock.send(name.encode())
-            elif operator == '>=':
-                if aux >= base_value:
-                    sock.send(name.encode())
-            elif operator == '<':
-                if aux < base_value:
-                    sock.send(name.encode())
-            elif operator == '<=':
-                if aux <= base_value:
-                    sock.send(name.encode())
-        except Exception:
-            pass
-        finally:
-            pass
-
-
-
-    def start_server_command(self, name):
-        self.server_comandos[name].listen(5)
-        print("Commands server {} listen in {}".format(name, self.server_comandos[name].getsockname()))
-        while True:
-            try:
-                sock, addr = self.server_comandos[name].accept()
-                _thread.start_new_thread(self.recv_commands, (sock,))
-            except KeyboardInterrupt:
-                self.target.close()
-                break
-
-    def start_server_evento(self, name):
-        self.server_eventos[name].listen(5)
-        print("Events server {} listen in {}".format(name, self.server_eventos[name].getsockname()))
-        while True:
-            try:
-                sock, addr = self.server_eventos[name].accept()
-                _thread.start_new_thread(self.recv_eventos, (sock,))
-            except KeyboardInterrupt:
-                pass
-
+        for key, val in self.server_eventos:
+            val.close()
 
     def start(self):
-        for key, values in self.server_comandos.items():
-            i = Thread(target=self.start_server_command, args=(key,))
-            i.start()
-            self.server_threads.append(i)
-        for key, values in self.server_eventos.items():
-            j = Thread(target=self.start_server_evento, args=(key,))
-            j.start()
-            self.server_threads.append(j)
-        for k in self.server_threads:
-            k.join()
+        try:
+            facade_eventos = multiprocessing.Process(target=self.start_server_event)
+            facade_comandos = multiprocessing.Process(target=self.start_server_command)
 
-    def recv_eventos(self, sock):
+            behaviour_se.behaviour_se(self.target, self.queue_events_send, self.queue_events_recv).run()
+            reconfiguration_se.reconfiguration_se(self.target, self.queue_commands_send, self.queue_commands_recv).run()
+
+            thread_exceptions = multiprocessing.Process(target=self.exceptions)
+
+            facade_eventos.start()
+            facade_comandos.start()
+            thread_exceptions.start()
+
+            facade_eventos.join()
+            facade_comandos.join()
+            thread_exceptions.join()
+
+
+        except Exception as e:
+            print(e)
+            self.close()
+        finally:
+            pass
+
+    def start_server_command(self):
+            self.server_comandos['principal'].listen(1)
+            print("Commands server principal listen in {}".format(self.server_comandos['principal'].getsockname()))
+
+            while True:
+                try:
+                    sock, addr = self.server_comandos['principal'].accept()
+                    self.command_facade(sock, self.queue_commands_recv)
+                except KeyboardInterrupt:
+                    self.target.close()
+                    break
+
+    def command_facade(self, client, queue):
         while True:
-            data = sock.recv(1024)
+            data = client.recv(1024).decode()
             try:
-                data = json.loads(data.decode())
-                if data['type'] == 'create':
-                    self.add_event(data,sock)
-                elif data['type'] == 'read':
-                    self.read_event(data,sock)
-                elif data['type'] == 'delete':
-                    self.delete_event(data, sock)
-                elif data['type'] == 'update':
-                    self.update_event(data, sock)
-            except Exception:
-                sock.send('Erro no evento'.encode())
-            
-
-    def recv_commands(self,sock):
-        while True:
-            data = sock.recv(1024)
-            try:
-                data = json.loads(data.decode())
-                if not "command" in data or not"params" in data:
-                    raise ValueError('Syntax err !!\n')
-
-                if data["command"] in self.commands:
-                    aux = self.commands[data["command"]].copy()
-                    aux.load_paramets(data["params"])
-
-                    if aux.validate():
-                        sock.send(self.send_command(aux).encode())
-                    else:
-                        raise ValueError('Params does not match !\n')
-
-                else:
-                    raise ValueError('Command not found\n')
-
-            except ValueError as err:
-                sock.send(str(err).encode())
-            except Exception:
-                sock.send("Err do not knowedge !!\n".encode())
-            except KeyboardInterrupt:
-                sock.close()
-                break
+                data = json.loads(data)
+                queue.put(data)
+            except Exception as err:
+                print('erro {}'.format(err))
+                client.send("Algum erro aconteceu, verifique a estrategia enviado erro {}".format(err).encode())
             finally:
                 pass
+
+
+
+    def start_server_event(self):
+        self.server_eventos['secundario'].listen(1)
+        print("Commands server secundario listen in {}".format( self.server_eventos['secundario'].getsockname()))
+
+        client, addr = self.server_eventos['secundario'].accept()
+
+        self.event_facade(client, self.queue_events_send)
+
+
+    def event_facade(self, client, queue):
+        while True:
+            data = client.recv(1024).decode()
+            try:
+                
+                data = json.loads(data)
+                queue.put(data)
+
+            except Exception as err:
+                print('erro {}'.format(err))
+                client.send("Algum erro aconteceu, verifique o comando enviado erro {}".format(err).encode())
+
+            finally:
+                pass
+    
+    def exceptions(self):
+        while True:
+            data = self.queue_events_recv.get()
+            print(data)
+
+        
+
+    # def recv_commands(self,sock):
+
+
+    #     while True:
+    #         data = sock.recv(1024)
+    #         try:
+    #             data = json.loads(data.decode())
+    #             if not "command" in data or not"params" in data:
+    #                 raise ValueError('Syntax err !!\n')
+
+    #             if data["command"] in self.commands:
+    #                 aux = self.commands[data["command"]].copy()
+    #                 aux.load_paramets(data["params"])
+
+    #                 if aux.validate():
+    #                     sock.send(self.send_command(aux).encode())
+    #                 else:
+    #                     raise ValueError('Params does not match !\n')
+
+    #             else:
+    #                 raise ValueError('Command not found\n')
+
+    #         except ValueError as err:
+    #             sock.send(str(err).encode())
+    #         except Exception:
+    #             sock.send("Err do not knowedge !!\n".encode())
+    #         except KeyboardInterrupt:
+    #             sock.close()
+    #             break
+    #         finally:
+    #             pass
             
     def send_command(self, command):
+        self.queue.put(command)
         self.target.send(command.command_txt().encode())
         data = self.target.recv(1024)
         return data.decode()
+
+    # def reconfiguration_system_enactor(self, queue_receiver, queue_sender):
+    #     while True:
+    #         cmd = queue_receiver.get()
+    #         self.target.send(cmd.command_txt().encode())
+    #         data = self.target.recv(1024)
+    #         queue_sender.put(data)
 
 
 if __name__ == '__main__':

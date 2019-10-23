@@ -1,3 +1,4 @@
+
 #parametros
 class parameter(object):
     def __init__(self):
@@ -94,6 +95,35 @@ class comand(object):
         
         return aux
 
+class command_facade(object):
+
+    modules = {}
+    commands = {}
+
+
+    #load_commansa
+    #@param - dict, commandos carregados
+    def load_commands(self, modules):
+         for i in modules['modules']:
+            self.__class__.modules[i['name']] = []
+            for j in i['commands']:
+                self.__class__.modules[i['name']].append(comand(j))
+                self.__class__.commands[j['command']] = self.__class__.modules[i['name']][-1]
+
+    #get_command - pega um comanod
+    #@param - dict - nome e parametros do comando
+    #return o comando, ou falso, caso o comando não exista
+    def get_command(self, data):
+        print(data)
+        if data['command'] in self.__class__.commands:
+            aux = self.__class__.commands[data['command']].copy()
+            aux.load_paramets(data['params'])
+            if aux.validate:
+                return aux
+
+        return False 
+
+
 
 if __name__ == '__main__':
     x = {"command":"get_utilization","description"	: "Retorna a utilização do servidor a partir do Id passado","params": [{"name"	: "serverId","type"	: "int","description": "Id do servidor pesquisado"}],"response"	: "float" }
@@ -101,3 +131,7 @@ if __name__ == '__main__':
     c = c.copy()
     c.load_paramets({"serverId":10})
     print(c.command_txt())
+
+
+
+
