@@ -1,8 +1,10 @@
 
-#parametros
+# parametros
+
+
 class parameter(object):
     def __init__(self):
-       pass
+        pass
 
     def validate(self):
         pass
@@ -30,6 +32,7 @@ class int_parameter(parameter):
     def val(self):
         return self.value
 
+
 class float_parameter(parameter):
     def __init__(self, name, description):
         super().__init__()
@@ -46,7 +49,8 @@ class float_parameter(parameter):
     def val(self):
         return self.value
 
-class parameter_factory(object): 
+
+class parameter_factory(object):
     def __init__(self):
         pass
 
@@ -60,7 +64,9 @@ class parameter_factory(object):
 
     get_instance = staticmethod(get_instance)
 
-#comandos
+# comandos
+
+
 class comand(object):
     def __init__(self, data):
         self.instance = data
@@ -69,7 +75,8 @@ class comand(object):
         self.description = data['description']
         self.response = data['response']
         for i in data['params']:
-            self.paramets[i['name']] = parameter_factory.get_instance(i['type'], i['name'], i['description'])
+            self.paramets[i['name']] = parameter_factory.get_instance(
+                i['type'], i['name'], i['description'])
 
     def load_paramets(self, data):
         for key, value in data.items():
@@ -87,51 +94,48 @@ class comand(object):
     def type_response(self):
         return self.response
 
-    #send Command
+    # send Command
     def command_txt(self):
         aux = self.name
         for key, value in self.paramets.items():
             aux = "{} {}".format(aux, value.val())
-        
+
         return aux
+
 
 class command_facade(object):
 
     modules = {}
     commands = {}
 
+    # load_commansa
+    # @param - dict, commandos carregados
 
-    #load_commansa
-    #@param - dict, commandos carregados
     def load_commands(self, modules):
-         for i in modules['modules']:
+        for i in modules['modules']:
             self.__class__.modules[i['name']] = []
             for j in i['commands']:
                 self.__class__.modules[i['name']].append(comand(j))
-                self.__class__.commands[j['command']] = self.__class__.modules[i['name']][-1]
+                self.__class__.commands[j['command']
+                                        ] = self.__class__.modules[i['name']][-1]
 
-    #get_command - pega um comanod
-    #@param - dict - nome e parametros do comando
-    #return o comando, ou falso, caso o comando não exista
+    # get_command - pega um comanod
+    # @param - dict - nome e parametros do comando
+    # return o comando, ou falso, caso o comando não exista
     def get_command(self, data):
-        print(data)
         if data['command'] in self.__class__.commands:
             aux = self.__class__.commands[data['command']].copy()
             aux.load_paramets(data['params'])
             if aux.validate:
                 return aux
 
-        return False 
-
+        return False
 
 
 if __name__ == '__main__':
-    x = {"command":"get_utilization","description"	: "Retorna a utilização do servidor a partir do Id passado","params": [{"name"	: "serverId","type"	: "int","description": "Id do servidor pesquisado"}],"response"	: "float" }
+    x = {"command": "get_utilization", "description"	: "Retorna a utilização do servidor a partir do Id passado", "params": [
+        {"name"	: "serverId", "type"	: "int", "description": "Id do servidor pesquisado"}], "response"	: "float"}
     c = comand(x)
     c = c.copy()
-    c.load_paramets({"serverId":10})
+    c.load_paramets({"serverId": 10})
     print(c.command_txt())
-
-
-
-

@@ -1,22 +1,21 @@
 {
   "config": "./configSwim.json",
-  "target":{
-      "host" : "127.0.0.1",
-      "port" : 4242
+  "target": {
+    "host": "127.0.0.1",
+    "port": 4242
   },
-  "server": [
-    {
+  "server": [{
       "name": "principal",
       "function": "comandos",
       "type": "socket",
       "host": "127.0.0.1",
-      "port": 0
+      "port": 3000
     },
     {
-      "name" : "secundario",
+      "name": "secundario",
       "function": "eventos",
-      "host" : "0.0.0.0",
-      "port": 0
+      "host": "0.0.0.0",
+      "port": 4000
     }
   ]
 }

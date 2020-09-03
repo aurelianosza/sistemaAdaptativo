@@ -1,0 +1,18 @@
+[
+	{"type": "create","name": "estouro_limite_potencia","operator": ">","base_value": 0.2,"interval": 3, "command": "get_dimmer","params": {}}
+	,
+	{"type": "create","name": "verify_server_1", "operator": ">=", "base_value": 0.6, "interval": 600, "command": "get_utilization", "params": {"serverId": "server1"}}
+	,
+	{"type": "create","name": "verify_server_1_remove", "operator": "<", "base_value": 0.1, "interval": 600, "command": "get_utilization", "params": {"serverId": "server1"}}
+	,
+	{"type": "active","name": "estouro_limite_potencia"}
+	,
+	{"type": "disable","name": "estouro_limite_potencia"}
+	,
+	{"type": "active","name": "verify_server_1"}
+	,
+	{"type": "active","name": "verify_server_1_remove"}
+
+
+
+]

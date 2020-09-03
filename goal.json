@@ -1,0 +1,134 @@
+{
+  "onInit": {
+    "behaviour": [
+      {
+        "type": "create",
+        "name": "verify_server_1",
+        "operator": ">",
+        "base_value": 0.2,
+        "interval": 420,
+        "command": "get_utilization",
+        "params": {
+          "serverId": "server1"
+        }
+      },
+      {
+        "type": "create",
+        "name": "verify_server_1_remove",
+        "operator": "<",
+        "base_value": 0.8,
+        "interval": 680,
+        "command": "get_utilization",
+        "params": {
+          "serverId": "server1"
+        }
+      },
+      {
+        "type": "create",
+        "name": "verify_throughput",
+        "operator": ">",
+        "base_value": 0.5,
+        "interval": 800,
+        "command": "get_basic_throughput",
+        "params": {}
+      },
+      {
+        "type": "create",
+        "name": "verify_throughput_2",
+        "operator": "<",
+        "base_value": 1.5,
+        "interval": 500,
+        "command": "get_basic_throughput",
+        "params": {}
+      },
+      {
+        "type": "active",
+        "name": "verify_server_1"
+      },
+      {
+        "type": "active",
+        "name": "verify_server_1_remove"
+      },
+      {
+        "type": "active",
+        "name": "verify_throughput"
+      },
+      {
+        "type": "active",
+        "name": "verify_throughput_2"
+      }
+    ],
+    "reconfiguration": [
+      {
+        "type": "add",
+        "name": "add_server",
+        "command": "add_server",
+        "expected": "OK",
+        "params": {}
+      },
+      {
+        "type": "add",
+        "name": "remove_server",
+        "command": "remove_server",
+        "expected": "OK",
+        "params": {}
+      },
+      {
+        "type": "add",
+        "name": "set_my_dimmer",
+        "command": "set_dimmer",
+        "expected": "OK",
+        "params": {
+          "value": 1.2
+        }
+      },
+      {
+        "type": "add",
+        "name": "set_my_dimmer_2",
+        "command": "set_dimmer",
+        "expected": "OK",
+        "params": {
+          "value": 0.6
+        }
+      }
+    ]
+  },
+  "resolversReconfiguration": {
+    "verify_server_1_remove": {
+      "behaviour": [],
+      "reconfiguration": [
+        {
+          "type": "run",
+          "name": "remove_server"
+        }
+      ]
+    },
+    "verify_server_1": {
+      "behaviour": [],
+      "reconfiguration": [
+        {
+          "type": "run",
+          "name": "add_server"
+        }
+      ]
+    },
+    "verify_throughput": {
+      "behaviour": [],
+      "reconfiguration": [
+        {
+          "type": "run",
+          "name": "set_my_dimmer"
+        }
+      ]
+    },
+    "verify_throughput_2": {
+      "behaviour": [],
+      "reconfiguration": [
+        {
+          "type": "run",
+          "name": "set_my_dimmer_2"
+        }
+      ]
+    }
+  }
+}

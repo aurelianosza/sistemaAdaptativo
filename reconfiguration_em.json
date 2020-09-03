@@ -1,0 +1,15 @@
+{
+    "type": "add",
+    "name": "auxiliar",
+    "strategies": [{
+        "command": "set_dimmer",
+        "params": {
+            "value": 0.5
+        }
+    }]
+}
+
+{
+    "type": "read",
+    "name": "auxiliar"
+}

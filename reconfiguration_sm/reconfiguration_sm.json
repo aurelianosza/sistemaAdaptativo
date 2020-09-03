@@ -1,0 +1,45 @@
+{
+    "tests": [{
+            "type": "add",
+            "name": "actual_dimmer",
+            "command": "get_dimmer",
+            "params": {}
+        },
+        {
+            "type": "run",
+            "name": "actual_dimmer"
+        },
+        {
+            "type": "add",
+            "name": "set_dimmer",
+            "command": "set_dimmer",
+            "expected": "OK",
+            "params": {
+                "value": 0.6
+            }
+        },
+        {
+            "type": "run",
+            "name": "set_dimmer"
+        },
+        {
+            "type": "add",
+            "name": "add_server",
+            "command": "add_server",
+            "expected": "OK",
+            "params": {}
+        },
+        {
+            "type": "add",
+            "name": "remove_server",
+            "command": "remove_server",
+            "expected": "OK",
+            "params": {}
+        },
+        {
+            "type": "run",
+            "name": "remove_server"
+        }
+
+    ]
+}
