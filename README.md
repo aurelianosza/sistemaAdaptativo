@@ -26,6 +26,9 @@ também precisará de previamente instalado
     <li>
         Python versao 3.6
     </li>
+    <li>
+        Biblioteca APS schedule já instalada.
+    </li>
 </ul>
 
 <h3>
@@ -50,17 +53,23 @@ também precisará de previamente instalado
         </p>
     </li>
     <li>
-        Após rodar o container, acesse em seu navegador de preferência o endereco <em>localhost:6901</em>,
+        Após rodar o container, acesse em seu navegador de preferência, o endereco <em>localhost:6901</em>,
         aparecerá um formulário pedindo uma senha para acessar o sistema no modo gráfico. A senha para acesso é <em>vncpassword</em>.
     </li>
     <li>
         Já dentro do sistema que foi aberto no navegador, siga até o diretório <em>/headless/seams-swim/swim/simulations/swim/</em>.
     </li>
     <li>
-        Dentro da pasta, abra o terminal, e digite o comando <em>./run.sh Reactive 0..2</em>.
+        Dentro da pasta, abra o terminal, e digite o comando <em>./run.sh Reactive 2</em>.
     </li>
     <li>
         Após isso, o swim estará rodando em sua maquina, mapeada na porta 4242.
+    </li>
+    <li>
+        A execução da simulação pode demorar um pouco, aguarde até o fim.
+    </li>
+    <li>
+        Após a execução, vá até a o diretório <em>/headless/seams-swim/results/ </em> e execute o comando <em>../swim/tools/plotResults.sh SWIM Reactive 2 result.png</em>, então o resultado da simulação irá aparecer na pasta.
     </li>
 </ul>
 
@@ -74,17 +83,13 @@ também precisará de previamente instalado
         Acesse o arquivo ini.json.
     </li>
     <li>
-        No objeto <em>target</em> dentro ddo arquivo de configuração, configure o host e a porta de sua aplicação alvo. Caso esteja usando o simulador SWIM descrito acima, o arquivo esta previamente definido. 
+        No objeto <em>target</em> dentro do arquivo de configuração, configure o host e a porta de sua aplicação alvo. Caso esteja usando o simulador SWIM descrito acima, o arquivo esta previamente definido. 
     </li>
     <li>
-        execute o arquivo de script <em>main.py</em> com o Python3.
-        A saída do script são os hosts e as portas que estão configuradas para executar comandos e gerenciar eventos.
+        Com o simulador SWIM já em funcionamento, execute o arquivo de script <em>main.py</em> com o Python3.
     </li>
     <li>
-        acesse o servidor principal esecundario via <em>telnet</em> e execute os comandos do arquivo test.json, que lista uma sequencia de comandos. 
-    </li>
-    <li>
-        O arquivo event.json enfatiza como fazer as operações de CRUD no servidor de eventos. Além deles, você pode verificar a lista de eventos e seus parametros no arquivo confiSwim.json
+        Após o término da execução, extraia o resultado denovo e compare com a execução sem o auxílio da camada.
     </li>
 
 </ul>
